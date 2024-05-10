@@ -33,7 +33,7 @@ public class Sale {
     @ManyToOne(fetch = FetchType.EAGER)
     private Employee employee;
 
-    @OneToMany(mappedBy = "sale" , cascade = CascadeType.ALL , orphanRemoval = true , fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "sale" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     private List<ItemSale> itemSaleList;
 
 

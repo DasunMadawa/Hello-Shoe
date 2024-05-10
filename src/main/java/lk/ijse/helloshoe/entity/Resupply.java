@@ -20,7 +20,7 @@ public class Resupply {
     private double totalValue;
     private int totalQty;
 
-    @OneToMany(mappedBy = "resupply" , cascade = CascadeType.ALL , orphanRemoval = true , fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "resupply" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     private List<ItemResupply> itemResupplyList;
 
 }

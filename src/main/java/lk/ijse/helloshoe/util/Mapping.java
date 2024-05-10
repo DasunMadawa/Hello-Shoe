@@ -2,8 +2,10 @@ package lk.ijse.helloshoe.util;
 
 import lk.ijse.helloshoe.dto.CustomerDTO;
 import lk.ijse.helloshoe.dto.EmployeeDTO;
+import lk.ijse.helloshoe.dto.SupplierDTO;
 import lk.ijse.helloshoe.entity.Customer;
 import lk.ijse.helloshoe.entity.Employee;
+import lk.ijse.helloshoe.entity.Supplier;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +58,27 @@ public class Mapping {
 
     public List<EmployeeDTO> toEmployeeDTOList(List<Employee> employeeList) {
         return modelMapper.map(employeeList, new TypeToken<ArrayList<EmployeeDTO>>() {}.getType());
+
+    }
+
+    //    Supplier
+    public Supplier toSupplier(SupplierDTO supplierDTO) {
+        return modelMapper.map(supplierDTO, Supplier.class);
+
+    }
+
+    public SupplierDTO toSupplierDTO(Supplier supplier) {
+        return modelMapper.map(supplier, SupplierDTO.class);
+
+    }
+
+    public List<Supplier> toSupplierList(List<SupplierDTO> supplierDTOList) {
+        return modelMapper.map(supplierDTOList, new TypeToken<ArrayList<Supplier>>() {}.getType());
+
+    }
+
+    public List<SupplierDTO> toSupplierDTOList(List<Supplier> supplierList) {
+        return modelMapper.map(supplierList, new TypeToken<ArrayList<SupplierDTO>>() {}.getType());
 
     }
 

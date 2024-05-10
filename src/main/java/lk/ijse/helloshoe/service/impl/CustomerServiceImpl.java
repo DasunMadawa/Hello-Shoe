@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 //@Transactional
@@ -49,8 +50,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public boolean updateCustomer(CustomerDTO customerDTO) {
         if (customerRepo.existsById(customerDTO.getCId())) {
-            customerRepo.save(mapping.toCustomer(customerDTO));
-            return true;
+            try {
+                customerRepo.save(mapping.toCustomer(customerDTO));
+                return true;
+
+            } catch (Exception e) {
+                throw new DuplicateException("Customer Duplicate DAta Entered");
+
+            }
 
         }
 

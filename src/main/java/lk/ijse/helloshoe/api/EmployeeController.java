@@ -55,7 +55,7 @@ public class EmployeeController {
 
         } catch (NotFoundException notFoundException) {
             System.out.println(notFoundException.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
         }
 
@@ -65,12 +65,11 @@ public class EmployeeController {
     @PutMapping(value = "{id}" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable("id") String employeeId , @ModelAttribute EmployeeDTO employeeDTO) {
         employeeDTO.setEmployeeId(employeeId);
-        System.out.println(employeeDTO);
         try {
             employeeService.updateEmployee(employeeDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(employeeDTO);
-        } catch (NotFoundException notFoundException) {
-            System.out.println(notFoundException.getMessage());
+        } catch (NotFoundException | DuplicateException exception) {
+            System.out.println(exception.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
         }
@@ -85,7 +84,7 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } catch (NotFoundException notFoundException) {
             System.out.println(notFoundException.getMessage());
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
         }
 

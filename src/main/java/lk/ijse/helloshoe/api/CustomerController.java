@@ -55,7 +55,7 @@ public class CustomerController {
 
         } catch (NotFoundException notFoundException) {
             System.out.println(notFoundException.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
         }
 
@@ -70,7 +70,8 @@ public class CustomerController {
             customerService.updateCustomer(customerDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(customerDTO);
 
-        } catch (NotFoundException notFoundException) {
+        } catch (NotFoundException | DuplicateException exception ) {
+            System.out.println(exception);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
         }
@@ -85,7 +86,7 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 
         } catch (NotFoundException notFoundException) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
         }
 

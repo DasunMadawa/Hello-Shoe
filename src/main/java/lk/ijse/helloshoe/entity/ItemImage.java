@@ -18,7 +18,7 @@ public class ItemImage {
     @Column(columnDefinition = "LONGTEXT")
     private String img;
 
-    @OneToMany(mappedBy = "itemImage" , cascade = CascadeType.ALL , orphanRemoval = true , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "itemImage" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<Stock> stockList;
 
 }

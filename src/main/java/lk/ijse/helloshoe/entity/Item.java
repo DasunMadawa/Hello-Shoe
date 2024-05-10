@@ -19,16 +19,16 @@ public class Item {
     private double priceBuy;
     private double priceSell;
 
-    @OneToMany(mappedBy = "item" , cascade = CascadeType.ALL , orphanRemoval = true , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "item" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<ItemSale> itemSaleList;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Supplier supplier;
 
-    @OneToMany(mappedBy = "item" , cascade = CascadeType.ALL , orphanRemoval = true , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "item" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<Stock> stockList;
 
-    @OneToMany(mappedBy = "item" , cascade = CascadeType.ALL , orphanRemoval = true , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "item" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<ItemResupply> itemResupplyList;
 
 

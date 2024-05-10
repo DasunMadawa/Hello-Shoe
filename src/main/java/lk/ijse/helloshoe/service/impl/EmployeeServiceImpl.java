@@ -52,8 +52,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public boolean updateEmployee(EmployeeDTO employeeDTO) {
         if (employeeRepo.existsById(employeeDTO.getEmployeeId())) {
-            employeeRepo.save(mapping.toEmployee(employeeDTO));
-            return true;
+            try {
+                employeeRepo.save(mapping.toEmployee(employeeDTO));
+                return true;
+
+            } catch (Exception e) {
+                throw new DuplicateException("Employee Duplicate Data Entered");
+
+            }
 
         }
 

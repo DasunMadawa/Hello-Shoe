@@ -33,7 +33,7 @@ public class Supplier {
     private String postalCode;
     private String country;
 
-    @OneToMany(mappedBy = "supplier" , cascade = CascadeType.ALL , orphanRemoval = true , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "supplier" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<Item> itemList;
 
 }
