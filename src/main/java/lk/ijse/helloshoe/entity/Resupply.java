@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -14,7 +15,8 @@ import java.util.List;
 public class Resupply {
     @Id
     private String resupplyId;
-    private String date;
+    @Temporal(TemporalType.DATE)
+    private Date date;
     private double totalValue;
     private int totalQty;
 

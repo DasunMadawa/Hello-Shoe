@@ -1,43 +1,39 @@
-package lk.ijse.helloshoe.entity;
+package lk.ijse.helloshoe.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lk.ijse.helloshoe.entity.enums.Gender;
 import lk.ijse.helloshoe.entity.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Entity
-public class Employee {
-    @Id
+public class EmployeeDTO {
     private String employeeId;
     private String employeeName;
 
-    @Column(columnDefinition = "LONGTEXT")
     private String profilePic;
 
-    @Enumerated(EnumType.STRING)
     private Gender gender;
     private String status;
     private String designation;
 
-    @Enumerated(EnumType.STRING)
     private Role accessRole;
 
-    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
-    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date joinDate;
     private String branch;
     private String contactNo;
 
-    @Column(unique = true)
     private String email;
 
     private String addressNoOrName;
@@ -51,12 +47,5 @@ public class Employee {
     private String emergencyContactPerson;
     private String emergencyContactNumber;
 
-    @OneToMany(mappedBy = "employee" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
-    private List<Sale> saleList;
-
-    @OneToMany(mappedBy = "employee" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
-    private List<Refund> refundList;
-
-
-
 }
+

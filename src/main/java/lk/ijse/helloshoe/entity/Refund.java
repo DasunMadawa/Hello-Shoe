@@ -15,8 +15,10 @@ public class Refund {
     @Id
     private String rId;
     private double value;
+    @Temporal(TemporalType.DATE)
     private Date date;
     private String reason;
+    private int qty;
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Employee employee;

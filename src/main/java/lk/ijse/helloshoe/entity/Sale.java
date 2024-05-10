@@ -19,6 +19,7 @@ public class Sale {
     private String oId;
     private String itemQty;
     private double totalPrice;
+    @Temporal(TemporalType.DATE)
     private Date date;
 
     @Enumerated(EnumType.STRING)
@@ -34,6 +35,7 @@ public class Sale {
 
     @OneToMany(mappedBy = "sale" , cascade = CascadeType.ALL , orphanRemoval = true , fetch = FetchType.EAGER)
     private List<ItemSale> itemSaleList;
+
 
 
 }

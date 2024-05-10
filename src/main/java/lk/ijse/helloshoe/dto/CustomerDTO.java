@@ -1,36 +1,35 @@
-package lk.ijse.helloshoe.entity;
+package lk.ijse.helloshoe.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
 import lk.ijse.helloshoe.entity.enums.Gender;
 import lk.ijse.helloshoe.entity.enums.LoyaltyLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Entity
-public class Customer {
-    @Id
+public class CustomerDTO {
     private String cId;
     @JsonProperty("cName")
     private String cName;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date joinDate;
 
     @Enumerated(EnumType.STRING)
     private LoyaltyLevel level;
 
     private int totalPoints;
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
     private String contactNo;
 
@@ -42,8 +41,5 @@ public class Customer {
     private String addressCity;
     private String addressState;
     private String postalCode;
-
-    @OneToMany(mappedBy = "customer" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
-    private List<Sale> saleList;
 
 }
