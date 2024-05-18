@@ -1,9 +1,8 @@
 package lk.ijse.helloshoe.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lk.ijse.helloshoe.entity.enums.Category;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,11 +10,16 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Entity
+//@Getter
+//@Setter
 public class Item {
     @Id
     private String iCode;
     private String description;
-    private String category;
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
     private double priceBuy;
     private double priceSell;
 

@@ -2,9 +2,7 @@ package lk.ijse.helloshoe.entity;
 
 import jakarta.persistence.*;
 import lk.ijse.helloshoe.entity.enums.SupplierCategory;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -12,6 +10,8 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Entity
+//@Getter
+//@Setter
 public class Supplier {
     @Id
     private String supplierId;

@@ -4,10 +4,12 @@ import lk.ijse.helloshoe.dto.EmployeeDTO;
 import lk.ijse.helloshoe.exception.DuplicateException;
 import lk.ijse.helloshoe.exception.NotFoundException;
 import lk.ijse.helloshoe.service.EmployeeService;
+import lk.ijse.helloshoe.util.MultipartFileToStringEditor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +20,12 @@ import java.util.List;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(String.class, "profilePic", new MultipartFileToStringEditor());
+    }
+
 
     @GetMapping("/health")
     public String employeeHealthCheck() {

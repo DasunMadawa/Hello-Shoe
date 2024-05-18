@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
 import lk.ijse.helloshoe.entity.enums.Gender;
 import lk.ijse.helloshoe.entity.enums.LoyaltyLevel;
 import lombok.*;
@@ -16,6 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 public class CustomerDTO {
+    @JsonProperty("cId")
     private String cId;
     @JsonProperty("cName")
     private String cName;
@@ -43,3 +43,4 @@ public class CustomerDTO {
     private String postalCode;
 
 }
+

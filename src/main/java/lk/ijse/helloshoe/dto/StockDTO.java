@@ -1,7 +1,8 @@
-package lk.ijse.helloshoe.entity;
+package lk.ijse.helloshoe.dto;
 
-import jakarta.persistence.*;
-import lk.ijse.helloshoe.entity.compositeId.StockId;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
 import lk.ijse.helloshoe.entity.enums.Colour;
 import lk.ijse.helloshoe.entity.enums.Size;
 import lk.ijse.helloshoe.entity.enums.StockStatus;
@@ -12,27 +13,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@IdClass(StockId.class)
-@Entity
-public class Stock {
-    @Id
-    @Enumerated(EnumType.STRING)
+public class StockDTO {
     private Size size;
     private int qty;
     private int maxQty;
 
-    @Enumerated(EnumType.STRING)
-    @Id
     private Colour colour;
 
-    @Enumerated(EnumType.STRING)
     private StockStatus status;
-
-    @ManyToOne
-    @Id
-    private Item item;
-
-    @ManyToOne
-    private ItemImage itemImage;
+    private String itemImgId;
 
 }

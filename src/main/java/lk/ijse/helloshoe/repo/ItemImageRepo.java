@@ -1,4 +1,9 @@
 package lk.ijse.helloshoe.repo;
 
-public interface ItemImageRepo {
+import lk.ijse.helloshoe.entity.ItemImage;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ItemImageRepo extends JpaRepository<ItemImage , String> {
+
+
 }
