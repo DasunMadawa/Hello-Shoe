@@ -2,6 +2,7 @@ package lk.ijse.helloshoe.util;
 
 import lk.ijse.helloshoe.dto.*;
 import lk.ijse.helloshoe.entity.*;
+import lk.ijse.helloshoe.entity.enums.StockStatus;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,9 +94,11 @@ public class Mapping {
         Item item = modelMapper.map(itemDTO, Item.class);
         createImageIds(itemDTO.getItemImageDTOList());
 
+//        System.out.println(item);
+//        System.out.println(itemDTO);
+
         Supplier supplier = new Supplier();
-        String supplierId = itemDTO.getSupplierDTO().getSupplierId();
-        supplier.setSupplierId(supplierId);
+        supplier.setSupplierId(itemDTO.getSupplierDTO().getSupplierId());
 
         item.setSupplier(supplier);
         List<Stock> stockList = new ArrayList<>();
@@ -127,7 +130,8 @@ public class Mapping {
 
         List<ItemImageDTO> itemImageDTOList = new ArrayList<>();
 
-        L1:for (Stock tempStock:item.getStockList()) {
+        L1:
+        for (Stock tempStock : item.getStockList()) {
             for (int i = 0; i < itemImageDTOList.size(); i++) {
                 if (itemImageDTOList.get(i).getItemImageId().equals(tempStock.getItemImage().getImgId())) {
                     continue L1;
@@ -136,7 +140,7 @@ public class Mapping {
 
             itemImageDTOList.add(
                     new ItemImageDTO(
-                            tempStock.getItemImage().getImgId() ,
+                            tempStock.getItemImage().getImgId(),
                             tempStock.getItemImage().getImg()
                     )
             );
@@ -144,22 +148,34 @@ public class Mapping {
         }
 
         itemDTO.setItemImageDTOList(itemImageDTOList);
-        System.out.println(itemDTO.getItemImageDTOList().size());
+//        System.out.println(itemDTO.getItemImageDTOList().size());
 
         return itemDTO;
 
     }
 
-//    public List<Item> toItemList(List<ItemDTO> itemDTOList) {
-//        return modelMapper.map(itemDTOList, new TypeToken<ArrayList<Item>>() {
-//        }.getType());
-//
-//    }
+    public List<Item> toItemList(List<ItemDTO> itemDTOList) {
+        return modelMapper.map(itemDTOList, new TypeToken<ArrayList<Item>>() {
+        }.getType());
+
+    }
 
     public List<ItemDTO> toItemDTOList(List<Item> itemList) {
         List<ItemDTO> itemDTOList = new ArrayList<>();
-        for (Item item:itemList) {
-            itemDTOList.add(toItemDTO(item));
+        for (Item item : itemList) {
+            itemDTOList.add(
+                    new ItemDTO(
+                            item.getICode(),
+                            item.getDescription(),
+                            item.getCategory(),
+                            item.getPriceBuy(),
+                            item.getPriceSell(),
+                            null,
+                            null,
+                            null
+
+                    )
+            );
 
         }
 
@@ -167,12 +183,105 @@ public class Mapping {
 
     }
 
-    private void createImageIds(List<ItemImageDTO> itemImageDTOList) {
-        for (int i = 0; i < itemImageDTOList.size(); i++) {
-            String generatedId = generateID.generateUUID();
-            imgHolderDTOList.add(new ImgHolderDTO(itemImageDTOList.get(i).getItemImageId() , generatedId , itemImageDTOList.get(i).getImage()));
+    public List<Stock> getStockList(ItemDTO itemDTO, Item item) {
+        createImageIds(itemDTO.getItemImageDTOList());
+
+        List<Stock> stockList = new ArrayList<>();
+
+        for (StockDTO stockDTO : itemDTO.getStockList()) {
+            Stock stock = new Stock(
+                    stockDTO.getSize(),
+                    stockDTO.getQty(),
+                    stockDTO.getMaxQty(),
+                    stockDTO.getColour(),
+                    stockDTO.getStatus(),
+                    item,
+                    getItemImage(stockDTO.getItemImgId())
+            );
+
+            stockList.add(stock);
+        }
+
+        return stockList;
+
+
+    }
+
+    public List<Stock> toStockList(List<StockDTO> stockDTOList, Item item) {
+        List<Stock> stockList = new ArrayList<>();
+
+        List<StockDTO> tempStockDTOListQTY = new ArrayList<>();
+        List<StockDTO> tempStockDTOListMaxQTY = new ArrayList<>();
+
+        for (int i = 0; i < stockDTOList.size(); i++) {
+            if (stockDTOList.get(i).getSize() == null) {
+                tempStockDTOListQTY = tempStockDTOListMaxQTY;
+                tempStockDTOListMaxQTY = new ArrayList<>();
+                System.out.println("Iter - " +i);
+                continue;
+            }
+
+            tempStockDTOListMaxQTY.add(stockDTOList.get(i));
+        }
+
+        for (int i = 0; i < tempStockDTOListQTY.size(); i++) {
+            System.out.println(tempStockDTOListMaxQTY.get(i).getMaxQty());
+
+            Stock stock = new Stock(
+                    tempStockDTOListQTY.get(i).getSize(),
+                    tempStockDTOListQTY.get(i).getQty(),
+                    tempStockDTOListMaxQTY.get(i).getMaxQty(),
+                    tempStockDTOListQTY.get(i).getColour(),
+                    tempStockDTOListQTY.get(i).getStatus(),
+                    item,
+                    getItemImage(item , tempStockDTOListQTY.get(i).getItemImgId())
+
+            );
+
+            stock.setStatus( statusCalc(stock.getQty() , stock.getMaxQty() ));
+
+            stockList.add(stock);
 
         }
+
+        return stockList;
+
+    }
+
+    private StockStatus statusCalc(int qty , int maxQty) {
+        if (qty == 0) {
+            return StockStatus.NOT_AVAILABLE;
+        }
+
+        if ((qty*2) > maxQty) {
+            return StockStatus.AVAILABLE;
+        } else {
+            return StockStatus.LOW;
+        }
+
+    }
+
+    private ItemImage getItemImage(Item item , String imageId) {
+        for (Stock stock:item.getStockList()) {
+            if (stock.getItemImage().getImgId().equals(imageId)) {
+                return stock.getItemImage();
+            }
+
+        }
+
+        return null;
+    }
+
+    private void createImageIds(List<ItemImageDTO> itemImageDTOList) {
+        imgHolderDTOList = new ArrayList<>();
+
+        for (int i = 0; i < itemImageDTOList.size(); i++) {
+            String generatedId = generateID.generateUUID();
+            imgHolderDTOList.add(new ImgHolderDTO(itemImageDTOList.get(i).getItemImageId(), generatedId, itemImageDTOList.get(i).getImage()));
+
+        }
+
+        System.out.println(imgHolderDTOList.size());
 
     }
 
@@ -181,7 +290,14 @@ public class Mapping {
             if (imgHolderDTO.getImgId().equals(imgId)) {
                 ItemImage itemImage = new ItemImage();
 
-                itemImage.setImgId(imgHolderDTO.getGeneratedImgId());
+                if (imgId.length() == 1) {
+                    itemImage.setImgId(imgHolderDTO.getGeneratedImgId());
+
+                } else {
+                    itemImage.setImgId(imgId);
+
+                }
+
                 itemImage.setImg(imgHolderDTO.getImg());
 
                 return itemImage;

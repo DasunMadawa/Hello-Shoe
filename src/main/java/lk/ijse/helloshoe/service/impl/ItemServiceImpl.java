@@ -1,6 +1,7 @@
 package lk.ijse.helloshoe.service.impl;
 
 import lk.ijse.helloshoe.dto.ItemDTO;
+import lk.ijse.helloshoe.dto.SupplierDTO;
 import lk.ijse.helloshoe.entity.Item;
 import lk.ijse.helloshoe.entity.Stock;
 import lk.ijse.helloshoe.entity.Supplier;
@@ -12,10 +13,15 @@ import lk.ijse.helloshoe.repo.SupplierRepo;
 import lk.ijse.helloshoe.service.ItemService;
 import lk.ijse.helloshoe.util.GenerateID;
 import lk.ijse.helloshoe.util.Mapping;
+import lk.ijse.helloshoe.util.MultipartFileToStringEditor;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -65,14 +71,72 @@ public class ItemServiceImpl implements ItemService {
 
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean updateItem(ItemDTO itemDTO) {
-        return false;
+        try {
+            if (itemRepo.existsById(itemDTO.getICode())) {
+                Item itemFetched = itemRepo.getReferenceById(itemDTO.getICode());
+                itemFetched.setDescription(itemDTO.getDescription());
+                itemFetched.setPriceBuy(itemDTO.getPriceBuy());
+                itemFetched.setPriceSell(itemDTO.getPriceSell());
+
+                List<Stock> stockList = mapping.getStockList(itemDTO, itemFetched);
+
+                for (Stock stock : stockList) {
+                    itemFetched.getStockList().add(stock);
+                    itemImageRepo.save(stock.getItemImage());
+                }
+
+                itemRepo.save(itemFetched);
+                return true;
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DuplicateException("Item Duplicate Data Entered");
+
+        }
+
+
+        throw new NotFoundException("Item Not Found");
+
+    }
+
+    @Transactional
+    @Override
+    public boolean updateItemStocks(ItemDTO itemDTO) {
+        try {
+            if (itemRepo.existsById(itemDTO.getICode())) {
+                Item itemFetched = itemRepo.getReferenceById(itemDTO.getICode());
+
+                itemFetched.setStockList(mapping.toStockList(itemDTO.getStockList() , itemFetched));
+
+                itemRepo.save(itemFetched);
+                return true;
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DuplicateException("Item Duplicate Data Entered");
+
+        }
+
+
+        throw new NotFoundException("Item Not Found");
+
     }
 
     @Override
     public boolean deleteItem(String itemCode) {
-        return false;
+        if (itemRepo.existsById(itemCode)) {
+            itemRepo.deleteById(itemCode);
+            return true;
+
+        }
+
+        throw new NotFoundException("Item Not Found");
+
     }
 
     @Override
@@ -80,4 +144,5 @@ public class ItemServiceImpl implements ItemService {
         return mapping.toItemDTOList(itemRepo.findAll());
 
     }
+
 }
