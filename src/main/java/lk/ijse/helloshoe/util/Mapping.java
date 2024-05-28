@@ -2,6 +2,9 @@ package lk.ijse.helloshoe.util;
 
 import lk.ijse.helloshoe.dto.*;
 import lk.ijse.helloshoe.entity.*;
+import lk.ijse.helloshoe.entity.enums.Category;
+import lk.ijse.helloshoe.entity.enums.Colour;
+import lk.ijse.helloshoe.entity.enums.Size;
 import lk.ijse.helloshoe.entity.enums.StockStatus;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -183,6 +186,25 @@ public class Mapping {
 
     }
 
+    public List<SaleItemHolderDTO> getSaleItems(List<Item> itemList) {
+        List<SaleItemHolderDTO> saleItemHolderDTOList = new ArrayList<>();
+
+        for (Item item : itemList) {
+            SaleItemHolderDTO saleItemHolderDTO = new SaleItemHolderDTO();
+
+            boolean isAvailable = setHoldersData(saleItemHolderDTO, item);
+
+            if (isAvailable) {
+                saleItemHolderDTOList.add(saleItemHolderDTO);
+
+            }
+
+        }
+
+        return saleItemHolderDTOList;
+
+    }
+
     public List<Stock> getStockList(ItemDTO itemDTO, Item item) {
         createImageIds(itemDTO.getItemImageDTOList());
 
@@ -217,7 +239,7 @@ public class Mapping {
             if (stockDTOList.get(i).getSize() == null) {
                 tempStockDTOListQTY = tempStockDTOListMaxQTY;
                 tempStockDTOListMaxQTY = new ArrayList<>();
-                System.out.println("Iter - " +i);
+                System.out.println("Iter - " + i);
                 continue;
             }
 
@@ -234,11 +256,11 @@ public class Mapping {
                     tempStockDTOListQTY.get(i).getColour(),
                     tempStockDTOListQTY.get(i).getStatus(),
                     item,
-                    getItemImage(item , tempStockDTOListQTY.get(i).getItemImgId())
+                    getItemImage(item, tempStockDTOListQTY.get(i).getItemImgId())
 
             );
 
-            stock.setStatus( statusCalc(stock.getQty() , stock.getMaxQty() ));
+            stock.setStatus(statusCalc(stock.getQty(), stock.getMaxQty()));
 
             stockList.add(stock);
 
@@ -248,12 +270,119 @@ public class Mapping {
 
     }
 
-    private StockStatus statusCalc(int qty , int maxQty) {
+    private boolean setHoldersData(SaleItemHolderDTO saleItemHolderDTO, Item item) {
+        List<Size> availableSizeList = new ArrayList<>();
+        List<Colour> availableColourList = new ArrayList<>();
+        List<SaleItemQtyHolderDTO> saleItemQtyHolderDTOList = new ArrayList<>();
+        List<SaleItemImageHolderDTO> saleItemImageHolderDTOList = new ArrayList<>();
+
+        for (Stock stock : item.getStockList()) {
+            if (!availableSizeList.contains(stock.getSize()) && stock.getQty() > 0) {
+                availableSizeList.add(stock.getSize());
+            }
+
+            if (!availableColourList.contains(stock.getColour())) {
+                availableColourList.add(stock.getColour());
+                saleItemImageHolderDTOList.add(new SaleItemImageHolderDTO(stock.getColour(), stock.getItemImage().getImg()));
+            }
+
+            saleItemQtyHolderDTOList.add(
+                    new SaleItemQtyHolderDTO(
+                            stock.getSize(),
+                            stock.getColour(),
+                            stock.getQty()
+                    )
+            );
+
+        }
+
+        if (availableSizeList.size() > 0) {
+            availableSizeList.sort(null);
+
+            saleItemHolderDTO.setAvailableSizeList(availableSizeList);
+            saleItemHolderDTO.setAvailableColourList(availableColourList);
+            saleItemHolderDTO.setSaleItemQtyHolderDTOList(saleItemQtyHolderDTOList);
+            saleItemHolderDTO.setSaleItemImageHolderDTOList(saleItemImageHolderDTOList);
+
+            saleItemHolderDTO.setICode(item.getICode());
+            saleItemHolderDTO.setTags(getTags(item.getICode(), item.getCategory()));
+            saleItemHolderDTO.setDescription(item.getDescription());
+
+            saleItemHolderDTO.setPrice(item.getPriceSell());
+
+            return true;
+        }
+
+        return false;
+
+    }
+
+
+    private List<String> getTags(String iCode, Category category) {
+        List<String> tagList = new ArrayList<>();
+
+        if (category.equals(Category.SHOES)) {
+            String tempICode = iCode.split("0")[0];
+
+            String occasion = tempICode.charAt(0) + "";
+            String verities = tempICode.length() == 3 ? tempICode.charAt(1) + "" : tempICode.substring(1, 2);
+            String gender = tempICode.charAt(tempICode.length() - 1) + "";
+
+            tagList.add(gender.equals("M") ? "#Male" : "#Female");
+
+            switch (occasion) {
+                case "F":
+                    tagList.add("#Formal");
+                    break;
+                case "C":
+                    tagList.add("#Casual");
+                    break;
+                case "I":
+                    tagList.add("#Industrial");
+                    break;
+                case "S":
+                    tagList.add("#Sport");
+                    break;
+            }
+
+            switch (verities) {
+                case "H":
+                    tagList.add("#Heel");
+                    break;
+                case "F":
+                    tagList.add("#Flats");
+                    break;
+                case "W":
+                    tagList.add("#Wedges");
+                    break;
+                case "FF":
+                    tagList.add("#FlipFlops");
+                    break;
+                case "SD":
+                    tagList.add("#Sandals");
+                    break;
+                case "S":
+                    tagList.add("#Shoes");
+                    break;
+                case "SL":
+                    tagList.add("#Slippers");
+                    break;
+            }
+
+        } else {
+            tagList.add("#Accessories");
+        }
+
+        return tagList;
+
+    }
+
+    private StockStatus statusCalc(int qty, int maxQty) {
         if (qty == 0) {
             return StockStatus.NOT_AVAILABLE;
         }
 
-        if ((qty*2) > maxQty) {
+        if ((qty * 2) > maxQty) {
             return StockStatus.AVAILABLE;
         } else {
             return StockStatus.LOW;
@@ -261,8 +390,8 @@ public class Mapping {
 
     }
 
-    private ItemImage getItemImage(Item item , String imageId) {
-        for (Stock stock:item.getStockList()) {
+    private ItemImage getItemImage(Item item, String imageId) {
+        for (Stock stock : item.getStockList()) {
             if (stock.getItemImage().getImgId().equals(imageId)) {
                 return stock.getItemImage();
             }

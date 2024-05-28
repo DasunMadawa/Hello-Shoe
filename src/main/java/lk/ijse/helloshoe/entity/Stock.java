@@ -32,7 +32,7 @@ public class Stock {
     @Id
     private Item item;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private ItemImage itemImage;
 
 }

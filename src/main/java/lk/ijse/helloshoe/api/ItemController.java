@@ -1,6 +1,7 @@
 package lk.ijse.helloshoe.api;
 
 import lk.ijse.helloshoe.dto.ItemDTO;
+import lk.ijse.helloshoe.dto.SaleItemHolderDTO;
 import lk.ijse.helloshoe.exception.DuplicateException;
 import lk.ijse.helloshoe.exception.NotFoundException;
 import lk.ijse.helloshoe.service.ItemService;
@@ -49,8 +50,8 @@ public class ItemController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/getAll" , produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ItemDTO>> getAllItemsWithStocks() {
-        return ResponseEntity.ok(itemService.getAllItems());
+    public ResponseEntity<List<SaleItemHolderDTO>> getAllItemsWithStockImages() {
+        return ResponseEntity.ok(itemService.getAllItemsForSale());
 
     }
 

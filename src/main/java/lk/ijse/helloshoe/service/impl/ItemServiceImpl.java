@@ -1,6 +1,8 @@
 package lk.ijse.helloshoe.service.impl;
 
 import lk.ijse.helloshoe.dto.ItemDTO;
+import lk.ijse.helloshoe.dto.SaleItemHolderDTO;
+import lk.ijse.helloshoe.dto.SaleItemQtyHolderDTO;
 import lk.ijse.helloshoe.dto.SupplierDTO;
 import lk.ijse.helloshoe.entity.Item;
 import lk.ijse.helloshoe.entity.Stock;
@@ -142,6 +144,12 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDTO> getAllItems() {
         return mapping.toItemDTOList(itemRepo.findAll());
+
+    }
+
+    @Override
+    public List<SaleItemHolderDTO> getAllItemsForSale() {
+        return mapping.getSaleItems(itemRepo.findAll());
 
     }
 
