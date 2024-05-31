@@ -76,9 +76,11 @@ public class SaleServiceImpl implements SaleService {
                 );
 
             }
+            if (saleDTO.getCustomerId() != null && saleDTO.getCustomerId().length() > 0) {
+                sale.setCustomer(customerRepo.getReferenceById(saleDTO.getCustomerId()));
 
+            }
             sale.setItemSaleList(itemSaleList);
-            sale.setCustomer(customerRepo.getReferenceById(saleDTO.getCustomerId()));
             sale.setEmployee(employeeRepo.getReferenceById(saleDTO.getEmployeeId()));
 
             saleRepo.save(sale);

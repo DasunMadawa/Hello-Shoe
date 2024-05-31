@@ -16,7 +16,6 @@ public class SaleDTO {
     @JsonProperty("oId")
     private String oId;
     private int itemQty;
-    private double totalPrice;
     private Date date;
     private PaymentMethod paymentMethod;
     private int points;
