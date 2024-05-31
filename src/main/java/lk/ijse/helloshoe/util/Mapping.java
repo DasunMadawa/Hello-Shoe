@@ -270,15 +270,25 @@ public class Mapping {
 
     }
 
+    public Sale toSale(SaleDTO saleDTO) {
+        return modelMapper.map(saleDTO , Sale.class);
+
+    }
+
+    public List<SaleDTO> toSaleDTOList(List<Sale> saleList) {
+        return modelMapper.map(saleList, new TypeToken<List<SaleDTO>>() {
+        }.getType());
+
+    }
+
     private boolean setHoldersData(SaleItemHolderDTO saleItemHolderDTO, Item item) {
-        List<Size> availableSizeList = new ArrayList<>();
         List<Colour> availableColourList = new ArrayList<>();
         List<SaleItemQtyHolderDTO> saleItemQtyHolderDTOList = new ArrayList<>();
         List<SaleItemImageHolderDTO> saleItemImageHolderDTOList = new ArrayList<>();
 
         for (Stock stock : item.getStockList()) {
-            if (!availableSizeList.contains(stock.getSize()) && stock.getQty() > 0) {
-                availableSizeList.add(stock.getSize());
+            if (!(stock.getQty() > 0)) {
+                continue;
             }
 
             if (!availableColourList.contains(stock.getColour())) {
@@ -296,16 +306,14 @@ public class Mapping {
 
         }
 
-        if (availableSizeList.size() > 0) {
-            availableSizeList.sort(null);
+        if (saleItemQtyHolderDTOList.size() > 0) {
 
-            saleItemHolderDTO.setAvailableSizeList(availableSizeList);
             saleItemHolderDTO.setAvailableColourList(availableColourList);
             saleItemHolderDTO.setSaleItemQtyHolderDTOList(saleItemQtyHolderDTOList);
             saleItemHolderDTO.setSaleItemImageHolderDTOList(saleItemImageHolderDTOList);
 
             saleItemHolderDTO.setICode(item.getICode());
-            saleItemHolderDTO.setTags(getTags(item.getICode(), item.getCategory()));
+            saleItemHolderDTO.setTags(getTags(item.getICode(), item.getCategory() , saleItemHolderDTO));
             saleItemHolderDTO.setDescription(item.getDescription());
 
             saleItemHolderDTO.setPrice(item.getPriceSell());
@@ -318,58 +326,78 @@ public class Mapping {
     }
 
 
-    private List<String> getTags(String iCode, Category category) {
+    private List<String> getTags(String iCode, Category category, SaleItemHolderDTO saleItemHolderDTO) {
         List<String> tagList = new ArrayList<>();
 
         if (category.equals(Category.SHOES)) {
+            saleItemHolderDTO.setCategory("Shoes");
+
             String tempICode = iCode.split("0")[0];
 
             String occasion = tempICode.charAt(0) + "";
             String verities = tempICode.length() == 3 ? tempICode.charAt(1) + "" : tempICode.substring(1, 2);
             String gender = tempICode.charAt(tempICode.length() - 1) + "";
 
-            tagList.add(gender.equals("M") ? "#Male" : "#Female");
+
+            tagList.add("#S");
+
+            saleItemHolderDTO.setGender(gender.equals("M") ? "Male" : "Female");
+            tagList.add("#" + saleItemHolderDTO.getGender());
 
             switch (occasion) {
                 case "F":
+                    occasion = "Formal";
                     tagList.add("#Formal");
                     break;
                 case "C":
+                    occasion = "Casual";
                     tagList.add("#Casual");
                     break;
                 case "I":
+                    occasion = "Industrial";
                     tagList.add("#Industrial");
                     break;
                 case "S":
+                    occasion = "Sport";
                     tagList.add("#Sport");
                     break;
             }
 
             switch (verities) {
                 case "H":
+                    verities = "Heel";
                     tagList.add("#Heel");
                     break;
                 case "F":
+                    verities = "Flats";
                     tagList.add("#Flats");
                     break;
                 case "W":
+                    verities = "Wedges";
                     tagList.add("#Wedges");
                     break;
                 case "FF":
+                    verities = "FlipFlops";
                     tagList.add("#FlipFlops");
                     break;
                 case "SD":
+                    verities = "Sandals";
                     tagList.add("#Sandals");
                     break;
                 case "S":
+                    verities = "Shoes";
                     tagList.add("#Shoes");
                     break;
                 case "SL":
+                    verities = "Slippers";
                     tagList.add("#Slippers");
                     break;
             }
 
+            saleItemHolderDTO.setOccasion(occasion);
+            saleItemHolderDTO.setVerities(verities);
         } else {
+            saleItemHolderDTO.setCategory("Accessories");
             tagList.add("#Accessories");
         }
 
@@ -409,8 +437,6 @@ public class Mapping {
             imgHolderDTOList.add(new ImgHolderDTO(itemImageDTOList.get(i).getItemImageId(), generatedId, itemImageDTOList.get(i).getImage()));
 
         }
-
-        System.out.println(imgHolderDTOList.size());
 
     }
 

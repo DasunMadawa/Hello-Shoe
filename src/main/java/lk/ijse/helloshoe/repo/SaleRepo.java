@@ -1,4 +1,10 @@
 package lk.ijse.helloshoe.repo;
 
-public interface SaleRepo {
+import lk.ijse.helloshoe.entity.Sale;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface SaleRepo extends JpaRepository<Sale , String> {
+
+
+
 }

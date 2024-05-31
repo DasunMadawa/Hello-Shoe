@@ -17,7 +17,7 @@ import java.util.List;
 public class Sale {
     @Id
     private String oId;
-    private String itemQty;
+    private int itemQty;
     private double totalPrice;
     @Temporal(TemporalType.DATE)
     private Date date;
@@ -27,13 +27,13 @@ public class Sale {
 
     private int points;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Employee employee;
 
-    @OneToMany(mappedBy = "sale" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "sale" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<ItemSale> itemSaleList;
 
 

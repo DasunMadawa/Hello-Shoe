@@ -39,6 +39,11 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public boolean saveItem(ItemDTO itemDTO) {
         try {
+            if (itemRepo.existsById(itemDTO.getICode())) {
+                throw new DuplicateException("Already saved item");
+
+            }
+
             Item item = mapping.toItem(itemDTO);
             Supplier supplier = supplierRepo.getReferenceById(item.getSupplier().getSupplierId());
 
@@ -112,7 +117,7 @@ public class ItemServiceImpl implements ItemService {
             if (itemRepo.existsById(itemDTO.getICode())) {
                 Item itemFetched = itemRepo.getReferenceById(itemDTO.getICode());
 
-                itemFetched.setStockList(mapping.toStockList(itemDTO.getStockList() , itemFetched));
+                itemFetched.setStockList(mapping.toStockList(itemDTO.getStockList(), itemFetched));
 
                 itemRepo.save(itemFetched);
                 return true;

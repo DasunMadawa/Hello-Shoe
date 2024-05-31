@@ -18,10 +18,15 @@ public class SaleItemHolderDTO {
     private String iCode;
     private List<String> tags;
     private String description;
-    private List<Size> availableSizeList;
+//    private List<Size> availableSizeList;
     private List<Colour> availableColourList;
     private List<SaleItemQtyHolderDTO> saleItemQtyHolderDTOList;
     private List<SaleItemImageHolderDTO> saleItemImageHolderDTOList;
     private double price;
+
+    private String category;
+    private String gender;
+    private String occasion;
+    private String verities;
 
 }
