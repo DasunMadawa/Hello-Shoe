@@ -22,6 +22,8 @@ public class SaleDTO {
     private List<SaleCartDTO> saleCartDTOList;
     private String customerId;
     private String employeeId;
+    private double totalPrice;
+
 
 
 }

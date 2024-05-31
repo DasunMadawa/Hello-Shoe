@@ -1,8 +1,10 @@
 package lk.ijse.helloshoe.api;
 
+import lk.ijse.helloshoe.dto.ItemDTO;
 import lk.ijse.helloshoe.dto.SaleCartDTO;
 import lk.ijse.helloshoe.dto.SaleDTO;
 import lk.ijse.helloshoe.exception.DuplicateException;
+import lk.ijse.helloshoe.exception.NotFoundException;
 import lk.ijse.helloshoe.service.SaleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,20 @@ public class SaleController {
 
         } catch (DuplicateException duplicateException) {
             System.out.println(duplicateException.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        }
+
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "{id}" , produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<SaleDTO> getSale(@PathVariable("id") String saleId) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(saleService.getSale(saleId));
+
+        } catch (NotFoundException notFoundException) {
+            System.out.println(notFoundException.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
         }

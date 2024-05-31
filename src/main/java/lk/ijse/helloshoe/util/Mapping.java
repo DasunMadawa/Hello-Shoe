@@ -275,6 +275,12 @@ public class Mapping {
 
     }
 
+    public SaleDTO toSaleDTO(Sale sale) {
+        SaleDTO saleDTO = modelMapper.map(sale, SaleDTO.class);
+        return saleDTO;
+
+    }
+
     public List<SaleDTO> toSaleDTOList(List<Sale> saleList) {
         return modelMapper.map(saleList, new TypeToken<List<SaleDTO>>() {
         }.getType());

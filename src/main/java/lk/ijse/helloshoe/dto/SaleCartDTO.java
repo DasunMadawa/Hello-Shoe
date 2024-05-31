@@ -13,8 +13,12 @@ import lombok.NoArgsConstructor;
 public class SaleCartDTO {
     @JsonProperty("iCode")
     private String iCode;
+    private String description;
     private int qty;
     private Size size;
     private Colour colour;
+    private double priceSingle;
+    private double priceTotal;
+    private String image;
 
 }

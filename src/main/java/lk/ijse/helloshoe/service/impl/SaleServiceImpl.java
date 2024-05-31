@@ -97,5 +97,44 @@ public class SaleServiceImpl implements SaleService {
 
     }
 
+    @Override
+    public SaleDTO getSale(String saleId) {
+        Sale sale = saleRepo.getReferenceById(saleId);
+        SaleDTO saleDTO = mapping.toSaleDTO(sale);
+
+        if (sale.getCustomer() != null) {
+            saleDTO.setCustomerId(sale.getCustomer().getCId());
+
+        }
+
+
+        List<SaleCartDTO> saleCartDTOList = new ArrayList<>();
+
+        for (ItemSale itemSale : sale.getItemSaleList()) {
+            Item item = itemRepo.getReferenceById(itemSale.getItem().getICode());
+            Stock stock = stockRepo.getItemStock(itemSale.getColour().toString(), itemSale.getSize().toString(), itemSale.getItem().getICode());
+
+
+            saleCartDTOList.add(
+                    new SaleCartDTO(
+                            itemSale.getItem().getICode(),
+                            item.getDescription(),
+                            itemSale.getQty(),
+                            itemSale.getSize(),
+                            itemSale.getColour(),
+                            item.getPriceSell(),
+                            (item.getPriceSell() * itemSale.getQty()),
+                            stock.getItemImage().getImg()
+
+                    )
+            );
+
+        }
+
+        saleDTO.setSaleCartDTOList(saleCartDTOList);
+        return saleDTO;
+
+    }
+
 
 }

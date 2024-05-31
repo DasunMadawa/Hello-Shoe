@@ -8,5 +8,6 @@ import java.util.List;
 public interface SaleService {
     List<SaleDTO> getAllSales();
     boolean placeOrder(SaleDTO saleDTO);
+    SaleDTO getSale(String saleId);
 
 }
