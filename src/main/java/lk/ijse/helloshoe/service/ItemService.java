@@ -11,6 +11,7 @@ public interface ItemService {
     ItemDTO getItem(String itemCode);
     boolean updateItem(ItemDTO itemDTO);
     boolean updateItemStocks(ItemDTO itemDTO);
+    boolean updateItemStocksAll(List<ItemDTO> itemDTOList);
     boolean deleteItem(String itemCode);
     List<ItemDTO> getAllItems();
     List<SaleItemHolderDTO> getAllItemsForSale();

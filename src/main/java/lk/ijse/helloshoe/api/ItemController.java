@@ -99,6 +99,20 @@ public class ItemController {
 
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping(value = "/qty}" , consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ItemDTO>> updateItemStocksAll(@RequestBody List<ItemDTO> itemDTOList) {
+        try {
+            itemService.updateItemStocksAll(itemDTOList);
+            return ResponseEntity.status(HttpStatus.CREATED).body(itemDTOList);
+        } catch (NotFoundException | DuplicateException exception) {
+            System.out.println(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+        }
+
+    }
+
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<ItemDTO> deleteItem(@PathVariable("id") String itemCode) {

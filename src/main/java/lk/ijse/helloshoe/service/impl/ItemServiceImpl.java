@@ -110,7 +110,7 @@ public class ItemServiceImpl implements ItemService {
 
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean updateItemStocks(ItemDTO itemDTO) {
         try {
@@ -124,13 +124,37 @@ public class ItemServiceImpl implements ItemService {
 
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             throw new DuplicateException("Item Duplicate Data Entered");
 
         }
 
 
         throw new NotFoundException("Item Not Found");
+
+    }
+
+    @Transactional
+    @Override
+    public boolean updateItemStocksAll(List<ItemDTO> itemDTOList) {
+        try {
+
+            for (ItemDTO itemDTO : itemDTOList) {
+                boolean isUpdated = updateItemStocks(itemDTO);
+
+                if (!isUpdated) {
+                    return false;
+                }
+
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DuplicateException("Item Duplicate Data Entered");
+
+        }
 
     }
 

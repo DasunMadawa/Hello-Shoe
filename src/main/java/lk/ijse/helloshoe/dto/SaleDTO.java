@@ -23,6 +23,4 @@ public class SaleDTO {
     private String customerId;
     private String employeeId;
     private double totalPrice;
-    
-
 }
