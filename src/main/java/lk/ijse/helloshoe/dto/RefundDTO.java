@@ -1,5 +1,6 @@
 package lk.ijse.helloshoe.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lk.ijse.helloshoe.entity.Employee;
 import lk.ijse.helloshoe.entity.ItemSale;
@@ -13,6 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 public class RefundDTO {
+    @JsonProperty("rId")
     private String rId;
     private double value;
     private Date date;
@@ -20,6 +22,10 @@ public class RefundDTO {
     private int qty;
 
     private String employeeId;
+    private String saleId;
     private String itemSaleId;
+
+    private SaleCartDTO saleCartDTO;
+
 
 }

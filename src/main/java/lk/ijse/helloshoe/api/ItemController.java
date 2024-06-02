@@ -100,7 +100,7 @@ public class ItemController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PutMapping(value = "/qty}" , consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/qty" , consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ItemDTO>> updateItemStocksAll(@RequestBody List<ItemDTO> itemDTOList) {
         try {
             itemService.updateItemStocksAll(itemDTOList);

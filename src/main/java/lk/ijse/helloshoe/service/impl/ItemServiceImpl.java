@@ -8,6 +8,7 @@ import lk.ijse.helloshoe.entity.Item;
 import lk.ijse.helloshoe.entity.Stock;
 import lk.ijse.helloshoe.entity.Supplier;
 import lk.ijse.helloshoe.exception.DuplicateException;
+import lk.ijse.helloshoe.exception.InvalidateException;
 import lk.ijse.helloshoe.exception.NotFoundException;
 import lk.ijse.helloshoe.repo.ItemImageRepo;
 import lk.ijse.helloshoe.repo.ItemRepo;
@@ -152,7 +153,7 @@ public class ItemServiceImpl implements ItemService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new DuplicateException("Item Duplicate Data Entered");
+            throw new InvalidateException("Item Data Invalid");
 
         }
 

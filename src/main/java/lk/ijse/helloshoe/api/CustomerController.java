@@ -29,7 +29,7 @@ public class CustomerController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO) {
         try {
-            System.out.println(customerDTO);
+//            System.out.println(customerDTO);
             customerService.saveCustomer(customerDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(customerDTO);
 
