@@ -35,6 +35,7 @@ public class EmployeeDTO {
     private String contactNo;
 
     private String email;
+    private String password;
 
     private String addressNoOrName;
     private String addressLane;

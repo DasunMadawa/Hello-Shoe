@@ -9,6 +9,7 @@ import lk.ijse.helloshoe.entity.enums.StockStatus;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public class Mapping {
     private ModelMapper modelMapper;
     @Autowired
     private GenerateID generateID;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private List<ImgHolderDTO> imgHolderDTOList = new ArrayList<>();
 
@@ -48,7 +51,9 @@ public class Mapping {
 
     //    Employee
     public Employee toEmployee(EmployeeDTO employeeDTO) {
-        return modelMapper.map(employeeDTO, Employee.class);
+        Employee employee = modelMapper.map(employeeDTO, Employee.class);
+        employee.setPassword(passwordEncoder.encode(employeeDTO.getPassword()));
+        return employee;
 
     }
 
@@ -271,7 +276,7 @@ public class Mapping {
     }
 
     public Sale toSale(SaleDTO saleDTO) {
-        return modelMapper.map(saleDTO , Sale.class);
+        return modelMapper.map(saleDTO, Sale.class);
 
     }
 
@@ -286,18 +291,19 @@ public class Mapping {
 
     }
 
-    public Refund toRefund(RefundDTO refundDTO){
-        return modelMapper.map(refundDTO , Refund.class);
+    public Refund toRefund(RefundDTO refundDTO) {
+        return modelMapper.map(refundDTO, Refund.class);
 
     }
 
-    public RefundDTO toRefundDTO(Refund refund){
-        return modelMapper.map(refund , RefundDTO.class);
+    public RefundDTO toRefundDTO(Refund refund) {
+        return modelMapper.map(refund, RefundDTO.class);
 
     }
 
     public List<RefundDTO> toRefundList(List<Refund> refundList) {
-        return modelMapper.map(refundList , new TypeToken<List<RefundDTO>>(){}.getType());
+        return modelMapper.map(refundList, new TypeToken<List<RefundDTO>>() {
+        }.getType());
 
     }
 
@@ -333,7 +339,7 @@ public class Mapping {
             saleItemHolderDTO.setSaleItemImageHolderDTOList(saleItemImageHolderDTOList);
 
             saleItemHolderDTO.setICode(item.getICode());
-            saleItemHolderDTO.setTags(getTags(item.getICode(), item.getCategory() , saleItemHolderDTO));
+            saleItemHolderDTO.setTags(getTags(item.getICode(), item.getCategory(), saleItemHolderDTO));
             saleItemHolderDTO.setDescription(item.getDescription());
 
             saleItemHolderDTO.setPrice(item.getPriceSell());

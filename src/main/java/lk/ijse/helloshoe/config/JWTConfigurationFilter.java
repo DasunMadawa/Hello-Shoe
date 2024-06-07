@@ -31,11 +31,9 @@ public class JWTConfigurationFilter extends OncePerRequestFilter {
         final String jwt;
         final String authorizationHeader = request.getHeader("Authorization");
 
-        System.out.println("11111111111111");
 //        validation get Auth Header status
         if (StringUtils.isEmpty(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
-            System.out.println("2222222222222222222222222333333333333333322222222");
             return;
 
         }

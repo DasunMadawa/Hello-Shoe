@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class SaleServiceImpl implements SaleService {
 
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = {Exception.class})
     @Override
     public boolean placeOrder(SaleDTO saleDTO) {
         try {
@@ -46,6 +47,7 @@ public class SaleServiceImpl implements SaleService {
             }
 
             Sale sale = mapping.toSale(saleDTO);
+            sale.setOId(saleDTO.getOId());
 
             List<ItemSale> itemSaleList = new ArrayList<>();
 
@@ -90,7 +92,7 @@ public class SaleServiceImpl implements SaleService {
 
 //        itemService.getItem()
 
-        } catch (Exception e) {
+        } catch (NotFoundException e) {
 
 
         }

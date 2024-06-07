@@ -1,18 +1,17 @@
 package lk.ijse.helloshoe.service.impl;
 
 import lk.ijse.helloshoe.entity.Employee;
-import lk.ijse.helloshoe.entity.User;
 import lk.ijse.helloshoe.repo.EmployeeRepo;
-import lk.ijse.helloshoe.repo.UserRepo;
 import lk.ijse.helloshoe.reqAndResp.response.JWTAuthResponse;
 import lk.ijse.helloshoe.reqAndResp.secure.SignIn;
 import lk.ijse.helloshoe.reqAndResp.secure.SignUp;
 import lk.ijse.helloshoe.service.AuthenticationService;
 import lk.ijse.helloshoe.service.JWTService;
-import lk.ijse.helloshoe.util.Mapping;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private final UserRepo userRepo;
+    private final EmployeeRepo employeeRepo;
     private final JWTService jwtService;
 
     private final PasswordEncoder passwordEncoder;
@@ -30,36 +29,41 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public JWTAuthResponse signIn(SignIn signIn) {
-        System.out.println("IN");
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(signIn.getEmail(), signIn.getPassword())
-        );
-        System.out.println("out");
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(signIn.getEmail(), signIn.getPassword())
+            );
+        } catch (AuthenticationException e) {
+            e.printStackTrace();
+            // Handle authentication failure
+            System.out.println("Authentication failed: " + e.getMessage());
+            throw new BadCredentialsException("Invalid email/password");
+        }
 
 
-        User userByEmail = userRepo.findByEmail(signIn.getEmail())
+        Employee employee = employeeRepo.findByEmail(signIn.getEmail())
                 .orElseThrow(
                         () -> new UsernameNotFoundException("User Not Found")
                 );
 
-        String token = jwtService.generateToken(userByEmail);
+        String token = jwtService.generateToken(employee);
 
-        return new JWTAuthResponse(token);
+        return new JWTAuthResponse(token + " " + employee.getAccessRole() +" " + employee.getEmployeeId());
 
     }
 
     @Override
     public JWTAuthResponse signUp(SignUp signUp) {
-        User userByEmail = userRepo.findByEmail(signUp.getEmail())
+        Employee employee = employeeRepo.findByEmail(signUp.getEmail())
                 .orElseThrow(
                         () -> new UsernameNotFoundException("User Not Found")
                 );
 
-        if (userByEmail != null) {
-            userByEmail.setPassword(passwordEncoder.encode(signUp.getPassword()));
-            userRepo.save(userByEmail);
+        if (employee != null) {
+            employee.setPassword(passwordEncoder.encode(signUp.getPassword()));
+            employeeRepo.save(employee);
 
-            String token = jwtService.generateToken(userByEmail);
+            String token = jwtService.generateToken(employee);
             return new JWTAuthResponse(token);
 
         } else {
@@ -73,11 +77,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public JWTAuthResponse refreshToken(String accessToken) {
         String userName = jwtService.extractUserName(accessToken);
 
-        User user = userRepo.findByEmail(userName).orElseThrow(
+        Employee employee = employeeRepo.findByEmail(userName).orElseThrow(
                 () -> new UsernameNotFoundException("User Not Found")
         );
 
-        String token = jwtService.generateToken(user);
+        String token = jwtService.generateToken(employee);
         return new JWTAuthResponse(token);
 
     }

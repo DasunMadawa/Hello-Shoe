@@ -27,14 +27,6 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests()
-//                .anyRequest().authenticated()
-//                .and()
-//                .httpBasic();
-//
-//        return httpSecurity.build();
-//
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req.requestMatchers("api/v1/auth/**")
@@ -47,26 +39,6 @@ public class SecurityConfig {
         return httpSecurity.build();
 
     }
-
-//    @Bean
-//    public InMemoryUserDetailsManager userDetailsManager() {
-//        UserDetails buildUser1 = User.withDefaultPasswordEncoder()
-//                .username("Dasun")
-//                .password("1234")
-//                .roles("USER").build();
-//
-//        UserDetails buildUser2 = User.withDefaultPasswordEncoder()
-//                .username("Madawa")
-//                .password("5678")
-//                .roles("USER").build();
-//
-//        UserDetails buildUser3 = User.withDefaultPasswordEncoder()
-//                .username("DasunMadawa")
-//                .password("12345678")
-//                .roles("USER").build();
-//
-//        return new InMemoryUserDetailsManager(buildUser1 , buildUser2 , buildUser z3);
-//
 //    }
 
     @Bean

@@ -2,6 +2,7 @@ package lk.ijse.helloshoe.service.impl;
 
 import lk.ijse.helloshoe.dto.CustomerDTO;
 import lk.ijse.helloshoe.dto.EmployeeDTO;
+import lk.ijse.helloshoe.entity.Employee;
 import lk.ijse.helloshoe.exception.DuplicateException;
 import lk.ijse.helloshoe.exception.NotFoundException;
 import lk.ijse.helloshoe.repo.CustomerRepo;
@@ -85,6 +86,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeDTO> getAllEmployees() {
         return mapping.toEmployeeDTOList(employeeRepo.findAll());
 
+    }
+
+    @Override
+    public EmployeeDTO getEmployeeByEmail(String mail) {
+//        return mapping.toEmployeeDTO(employeeRepo.findByEmail(mail).get());
+        return null;
     }
 
 }
