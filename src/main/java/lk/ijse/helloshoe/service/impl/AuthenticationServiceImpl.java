@@ -30,12 +30,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public JWTAuthResponse signIn(SignIn signIn) {
+        System.out.println("IN");
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        signIn.getEmail(),
-                        signIn.getPassword()
-                )
+                new UsernamePasswordAuthenticationToken(signIn.getEmail(), signIn.getPassword())
         );
+        System.out.println("out");
+
 
         User userByEmail = userRepo.findByEmail(signIn.getEmail())
                 .orElseThrow(
