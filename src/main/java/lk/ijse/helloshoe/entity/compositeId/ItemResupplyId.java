@@ -9,15 +9,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode
-public class ItemResupplyId {
+public class ItemResupplyId implements Serializable {
     private Item item;
     private Resupply resupply;
     private Colour colour;
     private Size size;
-
 
 }

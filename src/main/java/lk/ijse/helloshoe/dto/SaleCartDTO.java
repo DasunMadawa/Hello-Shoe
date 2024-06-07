@@ -20,5 +20,6 @@ public class SaleCartDTO {
     private double priceSingle;
     private double priceTotal;
     private String image;
+    private String itemSaleId;
 
 }

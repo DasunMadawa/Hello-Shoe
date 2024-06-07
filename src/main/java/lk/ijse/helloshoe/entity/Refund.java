@@ -23,7 +23,7 @@ public class Refund {
     @ManyToOne(fetch = FetchType.EAGER)
     private Employee employee;
 
-    @OneToOne
+    @ManyToOne
     private ItemSale itemSale;
 
 }

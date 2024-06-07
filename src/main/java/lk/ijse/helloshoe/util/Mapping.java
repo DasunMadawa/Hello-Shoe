@@ -296,6 +296,11 @@ public class Mapping {
 
     }
 
+    public List<RefundDTO> toRefundList(List<Refund> refundList) {
+        return modelMapper.map(refundList , new TypeToken<List<RefundDTO>>(){}.getType());
+
+    }
+
     private boolean setHoldersData(SaleItemHolderDTO saleItemHolderDTO, Item item) {
         List<Colour> availableColourList = new ArrayList<>();
         List<SaleItemQtyHolderDTO> saleItemQtyHolderDTOList = new ArrayList<>();

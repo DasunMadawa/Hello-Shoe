@@ -2,6 +2,7 @@ package lk.ijse.helloshoe.service;
 
 import lk.ijse.helloshoe.dto.CustomerDTO;
 import lk.ijse.helloshoe.dto.EmployeeDTO;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 

@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -20,8 +22,9 @@ public class ItemSale {
     private Sale sale;
     @ManyToOne
     private Item item;
-    @OneToOne(mappedBy = "itemSale")
-    private Refund refund;
+
+    @OneToMany(mappedBy = "itemSale")
+    private List<Refund> refundList;
 
 
     @Enumerated(EnumType.STRING)

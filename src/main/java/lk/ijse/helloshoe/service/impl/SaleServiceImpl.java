@@ -8,6 +8,8 @@ import lk.ijse.helloshoe.entity.Sale;
 import lk.ijse.helloshoe.entity.Stock;
 import lk.ijse.helloshoe.entity.enums.StockStatus;
 import lk.ijse.helloshoe.exception.DuplicateException;
+import lk.ijse.helloshoe.exception.InvalidateException;
+import lk.ijse.helloshoe.exception.NotFoundException;
 import lk.ijse.helloshoe.repo.*;
 import lk.ijse.helloshoe.service.SaleService;
 import lk.ijse.helloshoe.util.Mapping;
@@ -99,40 +101,47 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public SaleDTO getSale(String saleId) {
-        Sale sale = saleRepo.getReferenceById(saleId);
-        SaleDTO saleDTO = mapping.toSaleDTO(sale);
+        try {
 
-        if (sale.getCustomer() != null) {
-            saleDTO.setCustomerId(sale.getCustomer().getCId());
+            Sale sale = saleRepo.getReferenceById(saleId);
+            SaleDTO saleDTO = mapping.toSaleDTO(sale);
+
+            if (sale.getCustomer() != null) {
+                saleDTO.setCustomerId(sale.getCustomer().getCId());
+
+            }
+
+            List<SaleCartDTO> saleCartDTOList = new ArrayList<>();
+
+            for (ItemSale itemSale : sale.getItemSaleList()) {
+                Item item = itemRepo.getReferenceById(itemSale.getItem().getICode());
+                Stock stock = stockRepo.getItemStock(itemSale.getColour().toString(), itemSale.getSize().toString(), itemSale.getItem().getICode());
+
+
+                saleCartDTOList.add(
+                        new SaleCartDTO(
+                                itemSale.getItem().getICode(),
+                                item.getDescription(),
+                                itemSale.getQty(),
+                                itemSale.getSize(),
+                                itemSale.getColour(),
+                                item.getPriceSell(),
+                                (item.getPriceSell() * itemSale.getQty()),
+                                stock.getItemImage().getImg(),
+                                itemSale.getItemSaleId()
+
+                        )
+                );
+
+            }
+
+            saleDTO.setSaleCartDTOList(saleCartDTOList);
+            return saleDTO;
+
+        } catch (Exception e) {
+            throw new NotFoundException("Sale Not Found !");
 
         }
-
-
-        List<SaleCartDTO> saleCartDTOList = new ArrayList<>();
-
-        for (ItemSale itemSale : sale.getItemSaleList()) {
-            Item item = itemRepo.getReferenceById(itemSale.getItem().getICode());
-            Stock stock = stockRepo.getItemStock(itemSale.getColour().toString(), itemSale.getSize().toString(), itemSale.getItem().getICode());
-
-
-            saleCartDTOList.add(
-                    new SaleCartDTO(
-                            itemSale.getItem().getICode(),
-                            item.getDescription(),
-                            itemSale.getQty(),
-                            itemSale.getSize(),
-                            itemSale.getColour(),
-                            item.getPriceSell(),
-                            (item.getPriceSell() * itemSale.getQty()),
-                            stock.getItemImage().getImg()
-
-                    )
-            );
-
-        }
-
-        saleDTO.setSaleCartDTOList(saleCartDTOList);
-        return saleDTO;
 
     }
 

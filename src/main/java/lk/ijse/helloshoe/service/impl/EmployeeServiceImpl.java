@@ -10,6 +10,8 @@ import lk.ijse.helloshoe.service.EmployeeService;
 import lk.ijse.helloshoe.util.GenerateID;
 import lk.ijse.helloshoe.util.Mapping;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

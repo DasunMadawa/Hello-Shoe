@@ -42,8 +42,6 @@ public class EmployeeDTO {
     private String addressState;
     private String postalCode;
 
-    private String password;
-
     private String emergencyContactPerson;
     private String emergencyContactNumber;
 
