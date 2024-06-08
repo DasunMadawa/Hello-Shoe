@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotNull;
 import lk.ijse.helloshoe.entity.enums.Gender;
 import lk.ijse.helloshoe.entity.enums.LoyaltyLevel;
 import lombok.*;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.util.Date;
 
@@ -36,6 +36,7 @@ public class CustomerDTO {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
+    @NotNull
     private String contactNo;
 
     @Column(unique = true)

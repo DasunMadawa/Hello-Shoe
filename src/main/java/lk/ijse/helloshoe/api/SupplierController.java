@@ -1,5 +1,6 @@
 package lk.ijse.helloshoe.api;
 
+import jakarta.annotation.security.RolesAllowed;
 import lk.ijse.helloshoe.dto.SupplierDTO;
 import lk.ijse.helloshoe.entity.Supplier;
 import lk.ijse.helloshoe.exception.DuplicateException;
@@ -26,6 +27,7 @@ public class SupplierController {
 
     }
 
+    @RolesAllowed("ADMIN")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SupplierDTO> saveSupplier(@RequestBody SupplierDTO supplierDTO) {
@@ -60,6 +62,7 @@ public class SupplierController {
 
     }
 
+    @RolesAllowed("ADMIN")
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SupplierDTO> updateSupplier(@PathVariable("id") String supplierId , @RequestBody SupplierDTO supplierDTO) {
@@ -75,6 +78,7 @@ public class SupplierController {
 
     }
 
+    @RolesAllowed("ADMIN")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("{id}")
     public ResponseEntity<SupplierDTO> deleteSupplier(@PathVariable("id") String supplierId) {

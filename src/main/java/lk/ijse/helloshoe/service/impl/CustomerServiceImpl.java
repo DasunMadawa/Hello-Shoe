@@ -9,6 +9,7 @@ import lk.ijse.helloshoe.service.CustomerService;
 import lk.ijse.helloshoe.util.GenerateID;
 import lk.ijse.helloshoe.util.Mapping;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,12 +18,14 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 //@Transactional
 public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepo customerRepo;
     private final Mapping mapping;
     private final GenerateID generateID;
 
+//    log.info("Attempting to authenticate user: {}", signIn.getEmail());
     @Override
     public boolean saveCustomer(CustomerDTO customerDTO) {
         try {
@@ -80,6 +83,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<CustomerDTO> getAllCustomers() {
         return mapping.toCustomerDTOList(customerRepo.findAll());
+
+    }
+
+    @Override
+    public void sendBirthdayWishes() {
 
     }
 }

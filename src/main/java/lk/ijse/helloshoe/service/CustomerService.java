@@ -12,4 +12,6 @@ public interface CustomerService {
     boolean deleteCustomer(String cId);
     List<CustomerDTO> getAllCustomers();
 
+    void sendBirthdayWishes();
+
 }

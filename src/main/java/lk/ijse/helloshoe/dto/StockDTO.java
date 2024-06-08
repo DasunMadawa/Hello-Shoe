@@ -14,8 +14,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class StockDTO {
+    @jakarta.validation.constraints.Size(min = 0)
     private Size size;
+    @jakarta.validation.constraints.Size(min = 0)
     private int qty;
+    @jakarta.validation.constraints.Size(min = 0)
     private int maxQty;
 
     private Colour colour;

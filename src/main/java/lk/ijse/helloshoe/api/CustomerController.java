@@ -1,5 +1,6 @@
 package lk.ijse.helloshoe.api;
 
+import jakarta.annotation.security.RolesAllowed;
 import lk.ijse.helloshoe.dto.CustomerDTO;
 import lk.ijse.helloshoe.exception.DuplicateException;
 import lk.ijse.helloshoe.exception.NotFoundException;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("api/v1/customer")
@@ -61,6 +63,7 @@ public class CustomerController {
 
     }
 
+    @RolesAllowed("ADMIN")
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CustomerDTO> updateCustomer(@RequestBody CustomerDTO customerDTO, @PathVariable("id") String cId) {
@@ -78,6 +81,7 @@ public class CustomerController {
 
     }
 
+    @RolesAllowed("ADMIN")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "{id}")
     public ResponseEntity<CustomerDTO> deleteCustomer(@PathVariable("id") String cId) {

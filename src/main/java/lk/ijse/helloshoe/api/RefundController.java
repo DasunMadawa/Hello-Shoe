@@ -1,5 +1,6 @@
 package lk.ijse.helloshoe.api;
 
+import jakarta.annotation.security.RolesAllowed;
 import lk.ijse.helloshoe.dto.RefundDTO;
 import lk.ijse.helloshoe.dto.SaleDTO;
 import lk.ijse.helloshoe.exception.InvalidateException;
@@ -20,6 +21,7 @@ public class RefundController {
     @Autowired
     private RefundService refundService;
 
+    @RolesAllowed("ADMIN")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<RefundDTO>> saveRefund(@RequestBody List<RefundDTO> refundDTOList) {

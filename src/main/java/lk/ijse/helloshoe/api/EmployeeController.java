@@ -1,5 +1,6 @@
 package lk.ijse.helloshoe.api;
 
+import jakarta.annotation.security.RolesAllowed;
 import lk.ijse.helloshoe.dto.EmployeeDTO;
 import lk.ijse.helloshoe.exception.DuplicateException;
 import lk.ijse.helloshoe.exception.NotFoundException;
@@ -33,6 +34,7 @@ public class EmployeeController {
 
     }
 
+    @RolesAllowed("ADMIN")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<EmployeeDTO> saveEmployee(@ModelAttribute EmployeeDTO employeeDTO){
@@ -69,6 +71,7 @@ public class EmployeeController {
 
     }
 
+    @RolesAllowed("ADMIN")
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping(value = "{id}" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<EmployeeDTO> updateEmployee(@PathVariable("id") String employeeId , @ModelAttribute EmployeeDTO employeeDTO) {
@@ -84,6 +87,7 @@ public class EmployeeController {
 
     }
 
+    @RolesAllowed("ADMIN")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "{id}")
     public ResponseEntity<EmployeeDTO> deleteEmployee(@PathVariable("id") String employeeId) {

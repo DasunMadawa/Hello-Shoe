@@ -1,8 +1,7 @@
 package lk.ijse.helloshoe.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lk.ijse.helloshoe.entity.enums.Gender;
 import lk.ijse.helloshoe.entity.enums.Role;
 import lombok.AllArgsConstructor;
@@ -17,14 +16,17 @@ import java.util.Date;
 @Data
 public class EmployeeDTO {
     private String employeeId;
+    @NotNull
     private String employeeName;
 
     private String profilePic;
 
+    @NotNull
     private Gender gender;
     private String status;
     private String designation;
 
+    @NotNull
     private Role accessRole;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -34,6 +36,7 @@ public class EmployeeDTO {
     private String branch;
     private String contactNo;
 
+    @Email
     private String email;
     private String password;
 

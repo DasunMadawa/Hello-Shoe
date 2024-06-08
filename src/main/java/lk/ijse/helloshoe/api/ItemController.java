@@ -1,5 +1,6 @@
 package lk.ijse.helloshoe.api;
 
+import jakarta.annotation.security.RolesAllowed;
 import lk.ijse.helloshoe.dto.ItemDTO;
 import lk.ijse.helloshoe.dto.SaleItemHolderDTO;
 import lk.ijse.helloshoe.exception.DuplicateException;
@@ -26,6 +27,7 @@ public class ItemController {
 
     }
 
+    @RolesAllowed("ADMIN")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ItemDTO> saveItem(@RequestBody ItemDTO itemDTO){
@@ -69,6 +71,7 @@ public class ItemController {
 
     }
 
+    @RolesAllowed("ADMIN")
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping(value = "{id}" , consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ItemDTO> updateItem(@PathVariable("id") String itemCode , @RequestBody ItemDTO itemDTO) {
@@ -83,7 +86,7 @@ public class ItemController {
         }
 
     }
-
+    @RolesAllowed("ADMIN")
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping(value = "/qty/{id}" , consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ItemDTO> updateItemStocks(@PathVariable("id") String itemCode , @RequestBody ItemDTO itemDTO) {
@@ -98,7 +101,7 @@ public class ItemController {
         }
 
     }
-
+    @RolesAllowed("ADMIN")
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping(value = "/qty" , consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ItemDTO>> updateItemStocksAll(@RequestBody List<ItemDTO> itemDTOList) {
@@ -112,7 +115,7 @@ public class ItemController {
         }
 
     }
-
+    @RolesAllowed("ADMIN")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<ItemDTO> deleteItem(@PathVariable("id") String itemCode) {

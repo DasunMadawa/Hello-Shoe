@@ -2,6 +2,7 @@ package lk.ijse.helloshoe.dto;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotNull;
 import lk.ijse.helloshoe.entity.enums.SupplierCategory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class SupplierDTO {
     @Enumerated(EnumType.STRING)
     private SupplierCategory supplierCategory;
 
+    @NotNull
     private String mobileNo;
     private String landLineNo;
 
