@@ -18,6 +18,7 @@ import lk.ijse.helloshoe.util.GenerateID;
 import lk.ijse.helloshoe.util.Mapping;
 import lk.ijse.helloshoe.util.MultipartFileToStringEditor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 //@Transactional
+@Slf4j
 public class ItemServiceImpl implements ItemService {
     private final ItemRepo itemRepo;
     private final SupplierRepo supplierRepo;
@@ -58,10 +60,12 @@ public class ItemServiceImpl implements ItemService {
             }
 
             itemRepo.save(item);
+            log.info("Item save success");
             return true;
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            log.error("Item save failed");
             throw new DuplicateException("Item Duplicate Details Entered");
 
         }
@@ -71,10 +75,12 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDTO getItem(String itemCode) {
         if (itemRepo.existsById(itemCode)) {
+            log.info("Item fetched ");
             return mapping.toItemDTO(itemRepo.getReferenceById(itemCode));
 
         }
 
+        log.error("Item fetch failed");
         throw new NotFoundException("Item Not Found");
 
     }
@@ -97,15 +103,18 @@ public class ItemServiceImpl implements ItemService {
                 }
 
                 itemRepo.save(itemFetched);
+                log.info("Item  updated!");
                 return true;
 
             }
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("Item  fetched!");
             throw new DuplicateException("Item Duplicate Data Entered");
 
         }
 
+        log.error("Item  not found!");
 
         throw new NotFoundException("Item Not Found");
 
@@ -121,11 +130,14 @@ public class ItemServiceImpl implements ItemService {
                 itemFetched.setStockList(mapping.toStockList(itemDTO.getStockList(), itemFetched));
 
                 itemRepo.save(itemFetched);
+                log.info("stock updated!");
+
                 return true;
 
             }
         } catch (Exception e) {
 //            e.printStackTrace();
+            log.error("stock updated failed!");
             throw new DuplicateException("Item Duplicate Data Entered");
 
         }
@@ -149,9 +161,11 @@ public class ItemServiceImpl implements ItemService {
 
             }
 
+            log.info("ALl stock updated");
             return true;
 
         } catch (Exception e) {
+            log.error("stock all update failed");
             e.printStackTrace();
             throw new InvalidateException("Item Data Invalid");
 
@@ -163,22 +177,26 @@ public class ItemServiceImpl implements ItemService {
     public boolean deleteItem(String itemCode) {
         if (itemRepo.existsById(itemCode)) {
             itemRepo.deleteById(itemCode);
+            log.info("delete update");
             return true;
 
         }
 
+        log.error("delete update failed");
         throw new NotFoundException("Item Not Found");
 
     }
 
     @Override
     public List<ItemDTO> getAllItems() {
+        log.info("all item fetched");
         return mapping.toItemDTOList(itemRepo.findAll());
 
     }
 
     @Override
     public List<SaleItemHolderDTO> getAllItemsForSale() {
+        log.info("all items for sale fetched");
         return mapping.getSaleItems(itemRepo.findAll());
 
     }

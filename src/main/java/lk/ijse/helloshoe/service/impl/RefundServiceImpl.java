@@ -16,6 +16,7 @@ import lk.ijse.helloshoe.service.SaleService;
 import lk.ijse.helloshoe.util.GenerateID;
 import lk.ijse.helloshoe.util.Mapping;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RefundServiceImpl implements RefundService {
     private final RefundRepo refundRepo;
     private final EmployeeRepo employeeRepo;
@@ -57,10 +59,12 @@ public class RefundServiceImpl implements RefundService {
 
                 refundRepo.save(refund);
 
+                log.info("item refunded");
             }
 
             return true;
         } catch (Exception e) {
+            log.error("item fetched failed");
             e.printStackTrace();
             throw new InvalidateException("Refund data invalid");
 

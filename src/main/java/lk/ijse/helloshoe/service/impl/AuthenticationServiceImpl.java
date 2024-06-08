@@ -8,6 +8,7 @@ import lk.ijse.helloshoe.reqAndResp.secure.SignUp;
 import lk.ijse.helloshoe.service.AuthenticationService;
 import lk.ijse.helloshoe.service.JWTService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final EmployeeRepo employeeRepo;
     private final JWTService jwtService;
@@ -30,6 +32,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public JWTAuthResponse signIn(SignIn signIn) {
         try {
+            log.info("Sign in");
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(signIn.getEmail(), signIn.getPassword())
             );
@@ -54,6 +57,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public JWTAuthResponse signUp(SignUp signUp) {
+            log.info("Sign uo");
         Employee employee = employeeRepo.findByEmail(signUp.getEmail())
                 .orElseThrow(
                         () -> new UsernameNotFoundException("User Not Found")
@@ -75,6 +79,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public JWTAuthResponse refreshToken(String accessToken) {
+        log.info("token refreshed");
         String userName = jwtService.extractUserName(accessToken);
 
         Employee employee = employeeRepo.findByEmail(userName).orElseThrow(

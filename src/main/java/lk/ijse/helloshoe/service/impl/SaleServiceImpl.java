@@ -14,6 +14,7 @@ import lk.ijse.helloshoe.repo.*;
 import lk.ijse.helloshoe.service.SaleService;
 import lk.ijse.helloshoe.util.Mapping;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SaleServiceImpl implements SaleService {
     private final SaleRepo saleRepo;
     private final Mapping mapping;
@@ -33,6 +35,7 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public List<SaleDTO> getAllSales() {
+        log.info("All items fetched");
         return mapping.toSaleDTOList(saleRepo.findAll());
 
     }
@@ -88,11 +91,13 @@ public class SaleServiceImpl implements SaleService {
             sale.setEmployee(employeeRepo.getReferenceById(saleDTO.getEmployeeId()));
 
             saleRepo.save(sale);
+            log.info("sale placed");
             return true;
 
 //        itemService.getItem()
 
         } catch (NotFoundException e) {
+            log.error("sale place failed");
 
 
         }
@@ -138,9 +143,11 @@ public class SaleServiceImpl implements SaleService {
             }
 
             saleDTO.setSaleCartDTOList(saleCartDTOList);
+            log.info("sale details fetched");
             return saleDTO;
 
         } catch (Exception e) {
+            log.error("sale details fetching failed");
             throw new NotFoundException("Sale Not Found !");
 
         }

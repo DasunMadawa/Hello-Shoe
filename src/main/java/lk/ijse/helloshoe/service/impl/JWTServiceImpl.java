@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lk.ijse.helloshoe.service.JWTService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.function.Function;
 
 @Service
 @Transactional
+@Slf4j
 public class JWTServiceImpl implements JWTService {
     @Value("${token.key}")
     private String jwtKey;
@@ -31,6 +33,7 @@ public class JWTServiceImpl implements JWTService {
 
     @Override
     public String generateToken(UserDetails userDetails) {
+        log.info("token generated");
         return generateToken(new HashMap<>() , userDetails);
 
     }
