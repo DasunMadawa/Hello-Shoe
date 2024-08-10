@@ -13,4 +13,7 @@ public interface StockRepo extends JpaRepository<Stock , String> {
     @Query(value = "SELECT * FROM stock WHERE colour = ?1 && size = ?2 && item_i_code =?3" , nativeQuery = true)
     Stock getItemStock(String colour, String size , String iCode);
 
+//functional query
+//    Stock findAllByColourAndItemAnd
+
 }
